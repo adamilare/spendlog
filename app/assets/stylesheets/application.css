@@ -1,3 +1,4 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
@@ -23,10 +24,116 @@ body {
 
 main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--bkg-main);
+}
+
+section {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 10px var(--pad-m);
+}
+
+section.list-items {
+  gap: var(--pad-m);
+}
+
+.cat-item {
+  display: flex;
+  border-radius: 8px;
+  position: relative;
+  text-decoration: none;
+  height: 100px;
+  color: var(--brand-color-3b);
+}
+
+.cat-item img,
+.item-bottom,
+.item-top {
+  padding: 10px;
+}
+
+.cat-item img {
+  height: var(--img-w);
+  width: var(--img-w);
+  position: relative;
+  margin: 10px;
+  border-radius: 4px;
+  background-color: var(--brand-color-3b);
+}
+
+.item-info {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: white;
+  width: 100%;
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.item-top,
+.item-bottom {
+  padding-left: 100px;
+}
+
+.item-bottom {
+  background-color: #fdfdfd;
+}
+
+.item-top {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-top span {
+  font-size: large;
+  font-weight: 500;
+}
+
+.item-top .item-amount {
+  font-weight: bold;
+  color: var(--brand-color-3);
+}
+
+.action-bottom {
+  background-color: var(--brand-color-2);
+  width: 100%;
+}
+
+.action-bottom a {
+  flex: 1;
+  border-color: var(--nav-color);
+  color: var(--nav-color);
+}
+
+.secondary-bar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: large;
+  color: var(--nav-color);
+  background-color: var(--brand-color-1);
+}
+
+.brand-1 {
+  background-color: var(--brand-color-1);
+}
+
+.nav-color {
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .splash-screen {
-  background-color: aliceblue;
+  background-color: var(--bkg-grey);
   height: 100vh;
   position: absolute;
   top: 0;
@@ -42,4 +149,22 @@ main {
 .btn-splash-plain:hover {
   background-color: initial !important;
   border-color: initial !important;
+}
+
+.color-3 {
+  color: var(--brand-color-3c);
+}
+
+:root {
+  --brand-color-1: #3778c2;
+  --brand-color-2: #5fb523;
+  --brand-color-3: #434b54;
+  --brand-color-3a: rgb(67, 75, 84);
+  --brand-color-3b: rgb(134, 137, 142);
+  --brand-color-3c: rgb(152, 157, 163);
+  --bkg-grey: rgb(242, 242, 242);
+  --bkg-main: whitesmoke;
+  --nav-color: rgba(255, 255, 255, 0.6) !important;
+  --pad-m: 20px;
+  --img-w: 80px;
 }

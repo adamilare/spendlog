@@ -1,17 +1,12 @@
-<div id="<%= dom_id spend_category %>">
-  <p>
-    <strong>Name:</strong>
-    <%= spend_category.name %>
-  </p>
-
-  <p>
-    <strong>Icon:</strong>
-    <%= spend_category.icon %>
-  </p>
-
-  <p>
-    <strong>User:</strong>
-    <%= spend_category.user_id %>
-  </p>
-
-</div>
+<a class="cat-item" id="<%= dom_id spend_category %>">
+  <div class="item-info">
+    <div class="item-top">
+      <span class="item-name"><%= spend_category.name %></span>
+      <span class="item-amount">$2000</span>
+    </div>
+    <div class="item-bottom">
+      <span>4 July 2023</span>
+    </div>
+  </div>
+  <img src=<%= spend_category.icon %> alt="Cat" class="item-img" />
+</a>

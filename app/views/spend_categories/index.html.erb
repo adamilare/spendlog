@@ -1,14 +1,7 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Spend categories</h1>
-
-<div id="spend_categories">
-  <% @spend_categories.each do |spend_category| %>
-    <%= render spend_category %>
-    <p>
-      <%= link_to "Show this spend category", spend_category %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New spend category", new_spend_category_path %>
+<%= render 'shared/filter' %>
+<section id="spend_categories" class="list-items d-flex flex-column g-3">
+    <% @spend_categories.each do |spend_category| %>
+      <%= render spend_category %>     
+    <% end %>
+</section>
+<%= render 'shared/btn-action', data: {name: "Add New Category", path: '/categories/new'}%>

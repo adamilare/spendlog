@@ -1,14 +1,6 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Spend transactions</h1>
-
-<div id="spend_transactions">
+<section id="spend_transactions" class="d-flex flex-column g-3">
   <% @spend_transactions.each do |spend_transaction| %>
     <%= render spend_transaction %>
-    <p>
-      <%= link_to "Show this spend transaction", spend_transaction %>
-    </p>
-  <% end %>
 </div>
 
-<%= link_to "New spend transaction", new_spend_transaction_path %>
+<%= link_to "New spend transaction", new_spend_category_spend_transaction_path %>
