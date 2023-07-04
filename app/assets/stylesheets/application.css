@@ -13,3 +13,33 @@
  *= require_tree .
  *= require_self
  */
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  flex: 1;
+}
+
+.splash-screen {
+  background-color: aliceblue;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-bottom: 20px;
+}
+
+.btn-splash-plain {
+  background-color: transparent !important;
+  border: grey !important;
+}
+
+.btn-splash-plain:hover {
+  background-color: initial !important;
+  border-color: initial !important;
+}

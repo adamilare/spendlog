@@ -51,6 +51,7 @@ gem 'rubocop'
 
 gem 'cancancan'
 gem 'devise'
+gem 'bootstrap'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
