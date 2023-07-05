@@ -7,7 +7,8 @@ class Ability
     user ||= User.new
 
     return unless user.present?
-    can :manage, SpendCategory, user_id:  user.id
-    can :manage, SpendTransaction, author_id: user.id 
+
+    can :manage, SpendCategory, user_id: user.id
+    can :manage, SpendTransaction, author_id: user.id
   end
 end

@@ -1,28 +1,29 @@
+# frozen_string_literal: true
+
 class SpendTransactionsController < ApplicationController
   load_and_authorize_resource
   before_action :authenticate_user!
-  before_action :set_spend_transaction, only: %i[ show edit update destroy ]
+  before_action :set_spend_transaction, only: %i[show edit update destroy]
 
   # GET /spend_transactions or /spend_transactions.json
   def index
-    @spend_transactions = SpendTransaction.all
+    @spend_category = SpendCategory.find(params[:spend_category_id])
+    @spend_transactions = current_user.spend_transactions.joins(:category_transactions)
+                                      .where(category_transactions: { spend_category_id: @spend_category.id })
   end
 
   # GET /spend_transactions/1 or /spend_transactions/1.json
-  def show
-    puts '------------- show show'
-    # set_spend_transaction
-  end
+  def show; end
 
   # GET /spend_transactions/new
   def new
+    @spend_category = SpendCategory.find(params[:spend_category_id])
     @spend_transaction = SpendTransaction.new
     @user = current_user
   end
 
   # GET /spend_transactions/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /spend_transactions or /spend_transactions.json
   def create
@@ -32,10 +33,13 @@ class SpendTransactionsController < ApplicationController
     respond_to do |format|
       if @spend_transaction.save
         params[:spend_transaction][:spend_category_ids].each do |spend_category_id|
-          CategoryTransaction.create(spend_category_id: spend_category_id, spend_transaction_id: @spend_transaction.id)
+          CategoryTransaction.create(spend_category_id:, spend_transaction_id: @spend_transaction.id)
         end
-      
-        format.html { redirect_to spend_transaction_url(@spend_transaction), notice: "Spend transaction was successfully created." }
+
+        format.html do
+          redirect_to spend_category_spend_transactions_path(params[:spend_category_id]),
+                      notice: 'Spend transaction was successfully created.'
+        end
         format.json { render :show, status: :created, location: @spend_transaction }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -48,7 +52,9 @@ class SpendTransactionsController < ApplicationController
   def update
     respond_to do |format|
       if @spend_transaction.update(spend_transaction_params)
-        format.html { redirect_to spend_transaction_url(@spend_transaction), notice: "Spend transaction was successfully updated." }
+        format.html do
+          redirect_to spend_transaction_url(@spend_transaction), notice: 'Spend transaction was successfully updated.'
+        end
         format.json { render :show, status: :ok, location: @spend_transaction }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -62,26 +68,22 @@ class SpendTransactionsController < ApplicationController
     @spend_transaction.destroy
 
     respond_to do |format|
-      format.html { redirect_to spend_transactions_url, notice: "Spend transaction was successfully destroyed." }
+      format.html { redirect_to spend_transactions_url, notice: 'Spend transaction was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_spend_transaction
-      puts '------------set before'
-      begin
-        @spend_transaction = SpendTransaction.find(params[:id])
-        p '-------------set after', @spend_transaction
-      rescue => exception
-        puts ' rescued -------------------------------'
-        redirect_to spend_transactions_url, alert: "The transaction is not found."
-      end
-    end
 
-    # Only allow a list of trusted parameters through.
-    def spend_transaction_params
-      params.require(:spend_transaction).permit(:name, :amount, :author_id, :spend_category_ids)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_spend_transaction
+    @spend_transaction = SpendTransaction.find(params[:id])
+  rescue StandardError
+    redirect_to spend_transactions_url, alert: 'The transaction is not found.'
+  end
+
+  # Only allow a list of trusted parameters through.
+  def spend_transaction_params
+    params.require(:spend_transaction).permit(:name, :amount, :icon, :author_id, :spend_category_ids)
+  end
 end

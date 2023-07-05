@@ -1,12 +1,12 @@
-<a class="cat-item" id="<%= dom_id spend_category %>">
+<%= link_to spend_category_spend_transactions_path(spend_category), class: "cat-item", id: dom_id(spend_category) do %>
   <div class="item-info">
     <div class="item-top">
-      <span class="item-name"><%= spend_category.name %></span>
-      <span class="item-amount">$2000</span>
+      <span class="item-title"><%= spend_category.name %></span>
+      <span class='item-amount'>$<%= spend_category.total_amount %></span>
     </div>
     <div class="item-bottom">
-      <span>4 July 2023</span>
+      <span><%= spend_category.created_at.strftime('%e %B %Y') %></span>
     </div>
   </div>
-  <img src=<%= spend_category.icon %> alt="Cat" class="item-img" />
-</a>
+  <%= image_tag(spend_category.icon, alt: "Category Icon", class: "item-img") %>
+<% end %>

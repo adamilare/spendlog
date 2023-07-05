@@ -1,16 +1,19 @@
+# frozen_string_literal: true
+
 class SpendCategoriesController < ApplicationController
   load_and_authorize_resource
   before_action :authenticate_user!
-  before_action :set_spend_category, only: %i[ show edit update destroy ]
+  before_action :set_spend_category, only: %i[show edit update destroy]
 
   # GET /spend_categories or /spend_categories.json
   def index
-    @spend_categories = SpendCategory.all
+    @spend_categories = SpendCategory.with_transaction_sum_and_count(current_user)
+    @spend_categories.each do |spend_category|
+    end
   end
 
   # GET /spend_categories/1 or /spend_categories/1.json
-  def show
-  end
+  def show; end
 
   # GET /spend_categories/new
   def new
@@ -18,8 +21,7 @@ class SpendCategoriesController < ApplicationController
   end
 
   # GET /spend_categories/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /spend_categories or /spend_categories.json
   def create
@@ -28,7 +30,9 @@ class SpendCategoriesController < ApplicationController
 
     respond_to do |format|
       if @spend_category.save
-        format.html { redirect_to spend_category_url(@spend_category), notice: "Spend category was successfully created." }
+        format.html do
+          redirect_to spend_category_url(@spend_category), notice: 'Spend category was successfully created.'
+        end
         format.json { render :show, status: :created, location: @spend_category }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -41,7 +45,9 @@ class SpendCategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @spend_category.update(spend_category_params)
-        format.html { redirect_to spend_category_url(@spend_category), notice: "Spend category was successfully updated." }
+        format.html do
+          redirect_to spend_category_url(@spend_category), notice: 'Spend category was successfully updated.'
+        end
         format.json { render :show, status: :ok, location: @spend_category }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -55,19 +61,20 @@ class SpendCategoriesController < ApplicationController
     @spend_category.destroy
 
     respond_to do |format|
-      format.html { redirect_to spend_categories_url, notice: "Spend category was successfully destroyed." }
+      format.html { redirect_to spend_categories_url, notice: 'Spend category was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_spend_category
-      @spend_category = SpendCategory.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def spend_category_params
-      params.require(:spend_category).permit(:name, :icon)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_spend_category
+    @spend_category = SpendCategory.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def spend_category_params
+    params.require(:spend_category).permit(:name, :icon)
+  end
 end
