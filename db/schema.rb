@@ -1,7 +1,5 @@
-# frozen_string_literal: true
 
 ActiveRecord::Schema[7.0].define(version: 20_230_704_162_120) do
-  # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
   create_table 'category_transactions', force: :cascade do |t|

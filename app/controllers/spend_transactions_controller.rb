@@ -1,14 +1,14 @@
-# frozen_string_literal: true
-
 class SpendTransactionsController < ApplicationController
   load_and_authorize_resource
   before_action :authenticate_user!
   before_action :set_spend_transaction, only: %i[show edit update destroy]
 
+  include FileUploadHelper
+
   def index
     @spend_category = SpendCategory.find(params[:spend_category_id])
     @spend_transactions = current_user.spend_transactions.joins(:category_transactions)
-                                      .where(category_transactions: { spend_category_id: @spend_category.id })
+      .where(category_transactions: { spend_category_id: @spend_category.id })
   end
 
   def show; end
@@ -27,13 +27,9 @@ class SpendTransactionsController < ApplicationController
 
     @spend_transaction = user.spend_transactions.build(spend_transaction_params.except(:icon))
 
-    attached_icon = params[:spend_transaction][:icon]
+    params[:spend_transaction][:icon]
 
-    if attached_icon.present?
-      icon_path = Rails.root.join('app', 'assets', 'images', attached_icon.original_filename)
-      File.binwrite(icon_path, attached_icon.read)
-      @spend_transaction.icon = attached_icon.original_filename
-    end
+    @spend_transaction.icon = process_icon_upload(params[:spend_transaction][:icon])
 
     respond_to do |format|
       if @spend_transaction.save

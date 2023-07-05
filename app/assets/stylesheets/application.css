@@ -1,9 +1,5 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
 
-/* @font-face {
-  font-family: 'Proxima Nova';
-  src: url('/assets/fonts/ProximaNovaFont.otf') format('opentype');
-} */
 @font-face {
   font-family: 'Proxima Nova';
   src: asset-url('/assets/fonts/ProximaNovaFont.otf') format('opentype');
@@ -21,6 +17,7 @@ body {
 
 .logo {
   font-size: xx-large;
+
   /* font-weight: bold; */
 }
 
@@ -72,11 +69,6 @@ section.list-items {
   color: var(--brand-color-3b);
 }
 
-.item-bottom,
-.item-top {
-  padding: 10px;
-}
-
 .cat-item img {
   height: var(--img-w);
   width: var(--img-w);
@@ -94,7 +86,7 @@ section.list-items {
 
 .borderless {
   border: none !important;
-  background-color: none;
+  background-color: transparent;
   color: var(--brand-color-3b);
 }
 
@@ -203,18 +195,6 @@ section.list-items {
   color: var(--brand-color-3c);
 }
 
-.forms form input {
-  width: 100%;
-  height: 40px;
-  margin-top: 20px;
-  padding: 5px 20px;
-}
-
-.forms form label {
-  margin-bottom: -20px;
-  margin-top: 20px;
-}
-
 .none {
   display: none;
 }
@@ -245,13 +225,27 @@ section.list-items {
   white-space: nowrap;
 }
 
+.forms form input {
+  width: 100%;
+  height: 40px;
+  margin-top: 20px;
+  padding: 5px 20px;
+}
+
+.forms form label {
+  margin-bottom: -20px;
+  margin-top: 20px;
+}
+
 @keyframes fadeOut {
   0% {
     opacity: 1;
   }
+
   90% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
     display: none;

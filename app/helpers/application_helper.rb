@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ApplicationHelper
   def nav_active(page)
     return 'active' if current_page?(page) || request.original_fullpath.start_with?("#{page}/")
@@ -25,38 +23,45 @@ module ApplicationHelper
 
   def navigation_bar
     current_path = request.path
+
     if params[:controller].in?(%w[spend_categories spend_transactions])
-
-      case current_path
-
-      when new_spend_category_path
-        nav_content(root_path, 'NEW CATEGORY', 'Save', 'category-action')
-
-      when spend_category_spend_transactions_path # (spend_category_id: params[:spend_category_id])
-        return nav_content(root_path, 'TRANSACTIONS') if request.get?
-
-        set_nav_for_new_transaction if request.post?
-
-      when new_spend_category_spend_transaction_path # (spend_category_id: params[:spend_category_id])
-        set_nav_for_new_transaction
-      end
+      navigation_for_cat_trx(current_path)
 
     elsif params[:controller].in?(%w[devise/sessions devise/registrations devise/passwords])
-      case current_path
-      when new_user_session_path
-        nav_content('/welcome', 'LOGIN', 'Log in', 'login-action')
-
-      when new_user_registration_path
-        nav_content('/welcome', 'REGISTER', 'Next', 'signup-action')
-      when '/users'
-        nav_content('/welcome', 'REGISTER', 'Next', 'signup-action')
-      when '/users/password/new'
-        nav_content('/welcome', 'RESET PASSWORD', 'Reset', 'reset-action')
-      end
+      navigation_for_users(current_path)
     end
   end
 
-  def set_nav_for_new_transaction
+  def navigation_for_cat_trx
+    case current_path
+
+    when new_spend_category_path
+      nav_content(root_path, 'NEW CATEGORY', 'Save', 'category-action')
+
+    when spend_category_spend_transactions_path # (spend_category_id: params[:spend_category_id])
+      return nav_content(root_path, 'TRANSACTIONS') if request.get?
+
+      nav_for_new_transaction if request.post?
+
+    when new_spend_category_spend_transaction_path # (spend_category_id: params[:spend_category_id])
+      nav_for_new_transaction
+    end
+  end
+
+  def navigation_for_users(path)
+    case path
+    when new_user_session_path
+      nav_content('/welcome', 'LOGIN', 'Log in', 'login-action')
+
+    when new_user_registration_path, '/users'
+      nav_content('/welcome', 'REGISTER', 'Next', 'signup-action')
+
+    when '/users/password/new'
+      nav_content('/welcome', 'RESET PASSWORD', 'Reset', 'reset-action')
+    end
+  end
+
+  def nav_for_new_transaction
     parent_path = request.referrer.presence || spend_category_path(params[:spend_category_id])
     nav_content(parent_path, 'NEW TRANSACTION', 'Save', 'transaction-action')
   end
