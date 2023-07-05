@@ -13,6 +13,16 @@ module ApplicationHelper
     end
   end
 
+  def submit_form(form_id, button_id)
+    javascript_tag do
+      <<~JS
+        document.getElementById('#{button_id}').addEventListener('click', function() {
+          document.getElementById('#{form_id}').submit();
+        });
+      JS
+    end
+  end
+
   def navigation_bar
     current_path = request.path
     if params[:controller].in?(%w[spend_categories spend_transactions])
@@ -20,35 +30,57 @@ module ApplicationHelper
       case current_path
 
       when new_spend_category_path
-        nav_content(root_path, 'NEW CATEGORY')
+        nav_content(root_path, 'NEW CATEGORY', 'Save', 'category-action')
 
       when spend_category_spend_transactions_path # (spend_category_id: params[:spend_category_id])
-        nav_content(root_path, 'TRANSACTIONS')
+        return nav_content(root_path, 'TRANSACTIONS') if request.get?
+
+        set_nav_for_new_transaction if request.post?
 
       when new_spend_category_spend_transaction_path # (spend_category_id: params[:spend_category_id])
-        parent_path = request.referrer.presence || spend_category_path(params[:spend_category_id])
-        nav_content(parent_path, 'NEW TRANSACTION')
+        set_nav_for_new_transaction
       end
 
-    elsif params[:controller].in?(%w[devise/sessions devise/registrations])
+    elsif params[:controller].in?(%w[devise/sessions devise/registrations devise/passwords])
       case current_path
       when new_user_session_path
-        nav_content('/welcome', 'LOGIN')
+        nav_content('/welcome', 'LOGIN', 'Log in', 'login-action')
 
       when new_user_registration_path
-        nav_content('/welcome', 'REGISTER')
+        nav_content('/welcome', 'REGISTER', 'Next', 'signup-action')
+      when '/users'
+        nav_content('/welcome', 'REGISTER', 'Next', 'signup-action')
+      when '/users/password/new'
+        nav_content('/welcome', 'RESET PASSWORD', 'Reset', 'reset-action')
       end
     end
   end
 
-  def nav_content(back_link, nav_title)
+  def set_nav_for_new_transaction
+    parent_path = request.referrer.presence || spend_category_path(params[:spend_category_id])
+    nav_content(parent_path, 'NEW TRANSACTION', 'Save', 'transaction-action')
+  end
+
+  def nav_content(back_link, nav_title, rigth_text = '', form_id = '')
     content = <<-HTML
           <a href="#{back_link}" class="fa fa-long-arrow-alt-left nav-color" aria-hidden='true'></a>
           <span class="navbar-brand fs-4 nav-color">#{nav_title}</span>
-          <span class=""></span>
+          #{right_element(form_id, rigth_text)}
     HTML
 
     content.html_safe
+  end
+
+  def right_element(rigth_id, text)
+    if text
+      <<-HTML
+        <a class='action-trigger nav-color' id="#{rigth_id}">#{text}</a>
+      HTML
+    else
+      <<-HTML
+        <span></span>
+      HTML
+    end
   end
 
   def extract_parent_path(path)

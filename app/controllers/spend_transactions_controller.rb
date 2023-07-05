@@ -5,30 +5,35 @@ class SpendTransactionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_spend_transaction, only: %i[show edit update destroy]
 
-  # GET /spend_transactions or /spend_transactions.json
   def index
     @spend_category = SpendCategory.find(params[:spend_category_id])
     @spend_transactions = current_user.spend_transactions.joins(:category_transactions)
                                       .where(category_transactions: { spend_category_id: @spend_category.id })
   end
 
-  # GET /spend_transactions/1 or /spend_transactions/1.json
   def show; end
 
-  # GET /spend_transactions/new
   def new
     @spend_category = SpendCategory.find(params[:spend_category_id])
     @spend_transaction = SpendTransaction.new
     @user = current_user
   end
 
-  # GET /spend_transactions/1/edit
   def edit; end
 
-  # POST /spend_transactions or /spend_transactions.json
   def create
     user = current_user
-    @spend_transaction = user.spend_transactions.build(spend_transaction_params)
+    request.referrer, flash.now[:alert] = 'No category selected' unless params[:spend_transaction][:spend_category_ids]
+
+    @spend_transaction = user.spend_transactions.build(spend_transaction_params.except(:icon))
+
+    attached_icon = params[:spend_transaction][:icon]
+
+    if attached_icon.present?
+      icon_path = Rails.root.join('app', 'assets', 'images', attached_icon.original_filename)
+      File.binwrite(icon_path, attached_icon.read)
+      @spend_transaction.icon = attached_icon.original_filename
+    end
 
     respond_to do |format|
       if @spend_transaction.save
@@ -48,7 +53,6 @@ class SpendTransactionsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /spend_transactions/1 or /spend_transactions/1.json
   def update
     respond_to do |format|
       if @spend_transaction.update(spend_transaction_params)
@@ -63,7 +67,6 @@ class SpendTransactionsController < ApplicationController
     end
   end
 
-  # DELETE /spend_transactions/1 or /spend_transactions/1.json
   def destroy
     @spend_transaction.destroy
 
@@ -75,14 +78,12 @@ class SpendTransactionsController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_spend_transaction
     @spend_transaction = SpendTransaction.find(params[:id])
   rescue StandardError
     redirect_to spend_transactions_url, alert: 'The transaction is not found.'
   end
 
-  # Only allow a list of trusted parameters through.
   def spend_transaction_params
     params.require(:spend_transaction).permit(:name, :amount, :icon, :author_id, :spend_category_ids)
   end

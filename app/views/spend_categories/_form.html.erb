@@ -1,4 +1,4 @@
-<%= form_with(model: spend_category) do |form| %>
+<%= form_with(model: spend_category, id: 'new_category', multipart: true) do |form| %>
   <% if spend_category.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(spend_category.errors.count, "error") %> prohibited this spend_category from being saved:</h2>
@@ -16,12 +16,12 @@
     <%= form.text_field :name %>
   </div>
 
-  <div>
+   <div>
     <%= form.label :icon, style: "display: block" %>
-    <%= form.text_field :icon %>
+    <%= form.file_field :icon %>
   </div>
 
-  <div>
+  <div class='none'>
     <%= form.submit "Save" %>
   </div>
 <% end %>

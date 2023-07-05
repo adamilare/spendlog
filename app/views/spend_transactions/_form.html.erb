@@ -1,4 +1,4 @@
-<%= form_with(model: spend_transaction, url: spend_category_spend_transactions_path(@spend_category)) do |form| %>
+<%= form_with(model: spend_transaction, id:'new_transaction', url: spend_category_spend_transactions_path(params[:spend_category_id])) do |form| %>
   <% if spend_transaction.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(spend_transaction.errors.count, "error") %> prohibited this spend_transaction from being saved:</h2>
@@ -21,19 +21,24 @@
     <%= form.text_field :amount %>
   </div>
 
-  <div>
+   <div>
     <%= form.label :icon, style: "display: block" %>
-    <%= form.text_field :icon, placeholder: "url" %>
+    <%= form.file_field :icon %>
   </div>
 
   <div>
-  <%= form.label :spend_category_ids, "Select Categories", style: "display: block" %>
-  <%= form.collection_check_boxes :spend_category_ids, SpendCategory.all, :id, :name do |cb| %>
-    <%= cb.check_box %>
-    <%= cb.label %>
-  <% end %>
+    <%= form.label :spend_category_ids, "Select Categories", style: "display: block" %>
+    <div class='select-group'>
+      <%= form.collection_check_boxes :spend_category_ids, SpendCategory.all, :id, :name do |cb| %>
+        <div class='select-item'>
+          <%= cb.check_box %>
+          <%= cb.label %>
+        </div>
+      <% end %>
+    </div>
   </div>
-  <div>
+
+  <div class='none'>
     <%= form.submit 'Save' %>
   </div>
 <% end %>

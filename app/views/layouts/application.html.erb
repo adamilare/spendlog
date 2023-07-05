@@ -18,7 +18,15 @@
 
   <body>
     <main class='d-flex flex-column' >
-      <%= render 'shared/nav' %>
+     <% if notice.present? %>
+        <p class="notice flash-item"><%= notice %></p>
+      <% end %>
+      
+      <% if alert.present? %>
+        <p class="alert flash-item"><%= alert %></p>
+      <% end %>
+      
+    <%= render 'shared/nav' %>
       <%= yield %>
     </main>
       <script

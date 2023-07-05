@@ -2,7 +2,7 @@
   <div class="item-info">
     <div class="item-top">
       <span class="item-title"><%= spend_category.name %></span>
-      <span class='item-amount'>$<%= spend_category.total_amount %></span>
+      <span class='item-amount'>$<%= spend_category.total_amount.presence || '0.0' %></span>
     </div>
     <div class="item-bottom">
       <span><%= spend_category.created_at.strftime('%e %B %Y') %></span>

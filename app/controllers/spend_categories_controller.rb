@@ -5,33 +5,37 @@ class SpendCategoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_spend_category, only: %i[show edit update destroy]
 
-  # GET /spend_categories or /spend_categories.json
   def index
     @spend_categories = SpendCategory.with_transaction_sum_and_count(current_user)
     @spend_categories.each do |spend_category|
     end
   end
 
-  # GET /spend_categories/1 or /spend_categories/1.json
   def show; end
 
-  # GET /spend_categories/new
   def new
     @spend_category = SpendCategory.new
   end
 
-  # GET /spend_categories/1/edit
   def edit; end
 
-  # POST /spend_categories or /spend_categories.json
   def create
     current_user
-    @spend_category = current_user.spend_categories.build(spend_category_params)
+    @spend_category = current_user.spend_categories.build(spend_category_params.except(:icon))
+
+    attached_icon = params[:spend_category][:icon]
+
+    if attached_icon.present?
+      icon_path = Rails.root.join('app', 'assets', 'images', attached_icon.original_filename)
+      File.binwrite(icon_path, attached_icon.read)
+      @spend_category.icon = attached_icon.original_filename
+    end
 
     respond_to do |format|
       if @spend_category.save
         format.html do
-          redirect_to spend_category_url(@spend_category), notice: 'Spend category was successfully created.'
+          redirect_to spend_category_spend_transactions_url(@spend_category),
+                      notice: 'Spend category was successfully created.'
         end
         format.json { render :show, status: :created, location: @spend_category }
       else
@@ -41,7 +45,6 @@ class SpendCategoriesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /spend_categories/1 or /spend_categories/1.json
   def update
     respond_to do |format|
       if @spend_category.update(spend_category_params)
@@ -56,7 +59,6 @@ class SpendCategoriesController < ApplicationController
     end
   end
 
-  # DELETE /spend_categories/1 or /spend_categories/1.json
   def destroy
     @spend_category.destroy
 
@@ -68,12 +70,10 @@ class SpendCategoriesController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_spend_category
     @spend_category = SpendCategory.find(params[:id])
   end
 
-  # Only allow a list of trusted parameters through.
   def spend_category_params
     params.require(:spend_category).permit(:name, :icon)
   end
