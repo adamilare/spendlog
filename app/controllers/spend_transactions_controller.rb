@@ -17,6 +17,7 @@ class SpendTransactionsController < ApplicationController
     @spend_category = SpendCategory.find(params[:spend_category_id])
     @spend_transaction = SpendTransaction.new
     @user = current_user
+    @categories = current_user.spend_categories
   end
 
   def edit; end
