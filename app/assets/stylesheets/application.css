@@ -1,10 +1,5 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
 
-/* @font-face { */
-/* font-family: 'Proxima Nova'; */
-/* src: asset-url('/assets/fonts/ProximaNovaFont.otf') format('opentype'); stylelint-disable-line */
-/* } */
-
 body {
   display: flex;
   flex-direction: column;
@@ -116,8 +111,8 @@ section.list-items {
 
 .item-top,
 .item-bottom {
-  padding-left: 100px;
-  padding-left: 10px;
+  padding: 10px 10px 10px 100px;
+  /* padding-left: 10px; */
 }
 
 .item-bottom {
