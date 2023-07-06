@@ -1,0 +1,11 @@
+first_transaction:
+  author: first_user
+  name: 'Transaction 1'
+  icon: 'groceries.png'
+  amount: 200
+
+second_transaction:
+  author: first_user
+  name: 'Transaction 2'
+  icon: 'groceries.png'
+  amount: 300

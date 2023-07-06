@@ -32,7 +32,7 @@ module ApplicationHelper
     end
   end
 
-  def navigation_for_cat_trx
+  def navigation_for_cat_trx(current_path)
     case current_path
 
     when new_spend_category_path

@@ -1,0 +1,14 @@
+first_category:
+  name: 'Transportation'
+  icon: 'transportation.png'
+  user: first_user
+
+second_category:
+  name: 'Groceries'
+  icon: 'groceries.png'
+  user: first_user
+
+third_category:
+  name: 'Fashion'
+  icon: 'fashion.jpg'
+  user: second_user

@@ -1,9 +1,9 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
 
-@font-face {
-  font-family: 'Proxima Nova';
-  src: asset-url('/assets/fonts/ProximaNovaFont.otf') format('opentype');
-}
+/* @font-face { */
+/* font-family: 'Proxima Nova'; */
+/* src: asset-url('/assets/fonts/ProximaNovaFont.otf') format('opentype'); stylelint-disable-line */
+/* } */
 
 body {
   display: flex;
@@ -96,6 +96,10 @@ section.list-items {
   color: var(--brand-color-3c);
 }
 
+.btn-outline-primary:hover {
+  background-color: var(--brand-color-1) !important;
+}
+
 .item-info {
   position: absolute;
   left: 0;
@@ -113,6 +117,7 @@ section.list-items {
 .item-top,
 .item-bottom {
   padding-left: 100px;
+  padding-left: 10px;
 }
 
 .item-bottom {

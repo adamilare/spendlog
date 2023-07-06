@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 first_user = User.create(name: 'Damilare Ade', email: 'mail1@gmail.com',
                          password: '123456', password_confirmation: '123456')
 second_user = User.create(name: 'Ebun Ade', email: 'mail2@gmail.com',
@@ -16,8 +14,6 @@ first_transaction = SpendTransaction.create(author: first_user, name: 'Transacti
 second_transaction = SpendTransaction.create(author: first_user, name: 'Transaction 2',
                                              icon: 'groceries.png', amount: 300) # spend_category_ids: [1,2]
 
-CategoryTransaction.create(spend_category: first_category, spend_transaction: first_transaction)
-CategoryTransaction.create(spend_category: second_category,
-                           spend_transaction: first_transaction)
-CategoryTransaction.create(spend_category: second_category,
-                           spend_transaction: second_transaction)
+first_cat_trxn = CategoryTransaction.create(spend_category: first_category, spend_transaction: first_transaction)
+second_cat_trxn = CategoryTransaction.create(spend_category: second_category, spend_transaction: first_transaction)
+third_cat_trxn = CategoryTransaction.create(spend_category: second_category, spend_transaction: second_transaction)
