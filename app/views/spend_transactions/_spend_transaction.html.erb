@@ -1,0 +1,12 @@
+<div class="cat-item", id="${dom_id(spend_transaction)}">
+  <div class="item-info">
+    <div class="item-top">
+      <span class="item-title"><%= spend_transaction.name %></span>
+      <span class='item-amount'>$<%= spend_transaction.amount %></span>
+    </div>
+    <div class="item-bottom">
+      <span><%= spend_transaction.created_at.strftime('%e %B %Y') %></span>
+    </div>
+  </div>
+  <%= render 'shared/icon', icon: spend_transaction.icon %>
+</div>

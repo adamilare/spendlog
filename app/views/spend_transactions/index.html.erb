@@ -1,0 +1,10 @@
+<div class="secondary-bar-2">
+    <span class="item-title"><%=@spend_category.name%></span>
+    <span class="item-amount">$<%= @spend_transactions.sum(:amount) %></span>
+</div>
+<section id="spend_transactions" class="d-flex flex-column g-3 list-items">
+  <% @spend_transactions.each do |spend_transaction| %>
+    <%= render spend_transaction %>
+  <%end%>
+</section>
+<%= render 'shared/btn-action', data: {name: "Add New Transaction", path: new_spend_category_spend_transaction_path(@spend_category)}%>

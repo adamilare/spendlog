@@ -1,0 +1,11 @@
+first_cat_trxn:
+  spend_category: first_category
+  spend_transaction: first_transaction
+
+second_cat_trxn:
+  spend_category: second_category
+  spend_transaction: first_transaction
+
+third_cat_trxn:
+  spend_category: second_category
+  spend_transaction: second_transaction
