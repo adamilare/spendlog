@@ -87,6 +87,4 @@ test:
 #
 production:
   <<: *default
-  database: spendlog_production
-  username: spendlog
-  password: <%= ENV["SPENDLOG_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
