@@ -1,7 +1,7 @@
  <nav class="navbar navbar-dark brand-1">
       <div class="container-fluid px-4">
         <%current_path = request.path%>
-        <%if current_path == root_path || current_path == spend_categories_path %>
+        <%if !request.post? && (current_path == root_path || current_path == spend_categories_path) %>
             <button
               class="navbar-toggler"
               type="button"
