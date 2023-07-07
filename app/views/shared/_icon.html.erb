@@ -1,0 +1,5 @@
+<% if icon.present? %>
+  <%= image_tag(icon, alt: "Icon", class: "item-img") %>
+<% else %>
+  <%= image_tag("default_icon.svg", alt: "Default Icon", class: "item-img") %>
+<% end %>

@@ -1,0 +1,44 @@
+<%= form_with(model: spend_transaction, id:'new_transaction', url: spend_category_spend_transactions_path(params[:spend_category_id])) do |form| %>
+  <% if spend_transaction.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(spend_transaction.errors.count, "error") %> prohibited this spend_transaction from being saved:</h2>
+
+      <ul>
+        <% spend_transaction.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :amount, style: "display: block" %>
+    <%= form.number_field :amount %>
+  </div>
+
+   <div>
+    <%= form.label :icon, style: "display: block" %>
+    <%= form.file_field :icon %>
+  </div>
+
+  <div>
+    <%= form.label :spend_category_ids, "Select Categories", style: "display: block" %>
+    <div class='select-group'>
+      <%= form.collection_check_boxes :spend_category_ids, categories, :id, :name, checked: params[:spend_category_id] do |cb| %>
+        <div class='select-item'>
+          <%= cb.check_box %>
+          <%= cb.label %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class='none'>
+    <%= form.submit 'Save' %>
+  </div>
+<% end %>

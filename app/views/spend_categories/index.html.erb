@@ -1,0 +1,7 @@
+<%= render 'shared/filter' %>
+<section id="spend_categories" class="list-items d-flex flex-column g-3">
+    <% @spend_categories.each do |spend_category| %>
+      <%= render spend_category %>     
+    <% end %>
+</section>
+<%= render 'shared/btn-action', data: {name: "Add New Category", path: '/categories/new'}%>
