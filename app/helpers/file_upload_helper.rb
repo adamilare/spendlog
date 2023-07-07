@@ -18,7 +18,8 @@ module FileUploadHelper
   def generate_uuid_filename(filename)
     extension = File.extname(filename)
 
-    uuid = SecureRandom.uuid
+    uuid = SecureRandom.uuid.gsub('-', '')
+
     "#{uuid}#{extension}"
   end
 end
