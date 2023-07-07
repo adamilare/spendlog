@@ -1,7 +1,7 @@
 databases:
   - name: railsdb
-    databaseName: railsdb_xj0c
-    user: railsdb_xj0c_user
+    databaseName: railsdb_vnbb
+    user: railsdb_vnbb_user
 
 services:
   - type: web
