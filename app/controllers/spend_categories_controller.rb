@@ -19,11 +19,7 @@ class SpendCategoriesController < ApplicationController
 
   def create
     current_user
-    @spend_category = current_user.spend_categories.build(spend_category_params.except(:icon))
-
-    params[:spend_category][:icon]
-
-    @spend_category.icon = process_icon_upload(params[:spend_category][:icon])
+    @spend_category = current_user.spend_categories.build(spend_category_params)
 
     respond_to do |format|
       if @spend_category.save
@@ -31,10 +27,8 @@ class SpendCategoriesController < ApplicationController
           redirect_to spend_category_spend_transactions_url(@spend_category),
                       notice: 'Spend category was successfully created.'
         end
-        format.json { render :show, status: :created, location: @spend_category }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @spend_category.errors, status: :unprocessable_entity }
       end
     end
   end
