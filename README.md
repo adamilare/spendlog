@@ -75,9 +75,7 @@ A web application for management of your expenses. The application groups relate
 
 ### Live Demo <a name="live-demo"></a>
 
-[Budget Flow Live Demo](https://spendlog.onrender.com)
-
-[Presentation](https://www.loom.com/share/01793265dcb549aa9550d27c0872ee54?sid=cc9b7799-5048-4d77-9096-b225fccf7cc3)
+[SpendLog Live Demo](https://spendlog.onrender.com)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
