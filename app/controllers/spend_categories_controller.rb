@@ -21,9 +21,15 @@ class SpendCategoriesController < ApplicationController
     current_user
     @spend_category = current_user.spend_categories.build(spend_category_params.except(:icon))
 
-    params[:spend_category][:icon]
+    uploaded_icon = params[:spend_category][:icon]
 
-    @spend_category.icon = process_icon_upload(params[:spend_category][:icon])
+    # @spend_category.icon = process_icon_upload(params[:spend_category][:icon])
+
+    if uploaded_icon.present?
+      file_path = Rails.root.join('app', 'assets', 'images', uploaded_icon.original_filename)
+      File.binwrite(file_path, uploaded_icon.read)
+      @spend_category.icon = uploaded_icon.original_filename
+    end
 
     respond_to do |format|
       if @spend_category.save
@@ -31,10 +37,8 @@ class SpendCategoriesController < ApplicationController
           redirect_to spend_category_spend_transactions_url(@spend_category),
                       notice: 'Spend category was successfully created.'
         end
-        format.json { render :show, status: :created, location: @spend_category }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @spend_category.errors, status: :unprocessable_entity }
       end
     end
   end
