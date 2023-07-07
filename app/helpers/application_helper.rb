@@ -27,8 +27,9 @@ module ApplicationHelper
   def navigation_for_cat_trx(current_path)
     case current_path
 
-    when new_spend_category_path
-      nav_content(root_path, 'NEW CATEGORY', 'Save', 'category-action')
+    when new_spend_category_path, spend_categories_path
+      # nav_content(root_path, 'NEW CATEGORY', 'Save', 'category-action') if new_spend_category_path || request.post?
+      nav_for_cat_form
 
     when spend_category_spend_transactions_path # (spend_category_id: params[:spend_category_id])
       return nav_content(root_path, 'TRANSACTIONS') if request.get?
@@ -51,6 +52,10 @@ module ApplicationHelper
     when '/users/password/new'
       nav_content('/welcome', 'RESET PASSWORD', 'Reset', 'reset-action')
     end
+  end
+
+  def nav_for_cat_form
+    nav_content(root_path, 'NEW CATEGORY', 'Save', 'category-action') if new_spend_category_path || request.post?
   end
 
   def nav_for_new_transaction

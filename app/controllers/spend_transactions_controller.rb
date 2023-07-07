@@ -23,30 +23,31 @@ class SpendTransactionsController < ApplicationController
   def edit; end
 
   def create
-    user = current_user
-    request.referrer, flash.now[:alert] = 'No category selected' unless params[:spend_transaction][:spend_category_ids]
+    spend_category_ids = params[:spend_transaction][:spend_category_ids]
 
-    @spend_transaction = user.spend_transactions.build(spend_transaction_params.except(:icon))
+    if spend_category_ids.is_a?(Array) && spend_category_ids.any?(&:present?)
+      @spend_transaction = current_user.spend_transactions.build(spend_transaction_params.except(:icon))
 
-    params[:spend_transaction][:icon]
+      @spend_transaction.icon = process_icon_upload(params[:spend_transaction][:icon])
 
-    @spend_transaction.icon = process_icon_upload(params[:spend_transaction][:icon])
+      respond_to do |format|
+        if @spend_transaction.save
+          spend_category_ids.each do |spend_category_id|
+            CategoryTransaction.create(spend_category_id:, spend_transaction_id: @spend_transaction.id)
+          end
 
-    respond_to do |format|
-      if @spend_transaction.save
-        params[:spend_transaction][:spend_category_ids].each do |spend_category_id|
-          CategoryTransaction.create(spend_category_id:, spend_transaction_id: @spend_transaction.id)
+          format.html do
+            redirect_to spend_category_spend_transactions_path(params[:spend_category_id]),
+                        notice: 'Spend transaction was successfully created.'
+          end
+          # format.json { render :show, status: :created, location: @spend_transaction }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          # format.json { render json: @spend_transaction.errors, status: :unprocessable_entity }
         end
-
-        format.html do
-          redirect_to spend_category_spend_transactions_path(params[:spend_category_id]),
-                      notice: 'Spend transaction was successfully created.'
-        end
-        format.json { render :show, status: :created, location: @spend_transaction }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @spend_transaction.errors, status: :unprocessable_entity }
       end
+    else
+      reload_form
     end
   end
 
@@ -74,6 +75,12 @@ class SpendTransactionsController < ApplicationController
   end
 
   private
+
+  def reload_form
+    @categories = current_user.spend_categories
+    flash.now[:alert] = 'No category selected'
+    render :new, status: :unprocessable_entity
+  end
 
   def set_spend_transaction
     @spend_transaction = SpendTransaction.find(params[:id])
