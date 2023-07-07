@@ -20,6 +20,6 @@ module FileUploadHelper
 
     # uuid = SecureRandom.uuid.gsub('-', '')
 
-    "#{SecureRandom.hex(8)}#{extension}"
+    "#{SecureRandom.hex(4)}#{extension}"
   end
 end
