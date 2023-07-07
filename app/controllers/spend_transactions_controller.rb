@@ -23,27 +23,19 @@ class SpendTransactionsController < ApplicationController
   def edit; end
 
   def create
-    spend_category_ids = params[:spend_transaction][:spend_category_ids]
+    @spend_transaction = current_user.spend_transactions.new(spend_transaction_params)
 
-    if spend_category_ids.is_a?(Array) && spend_category_ids.any?(&:present?)
-      @spend_transaction = current_user.spend_transactions.build(spend_transaction_params.except(:icon))
-
-      @spend_transaction.icon = process_icon_upload(params[:spend_transaction][:icon])
+    if valid_transaction?
 
       respond_to do |format|
         if @spend_transaction.save
-          spend_category_ids.each do |spend_category_id|
-            CategoryTransaction.create(spend_category_id:, spend_transaction_id: @spend_transaction.id)
-          end
-
+          create_category_transactions
           format.html do
             redirect_to spend_category_spend_transactions_path(params[:spend_category_id]),
                         notice: 'Spend transaction was successfully created.'
           end
-          # format.json { render :show, status: :created, location: @spend_transaction }
         else
-          format.html { render :new, status: :unprocessable_entity }
-          # format.json { render json: @spend_transaction.errors, status: :unprocessable_entity }
+          reload_form
         end
       end
     else
@@ -76,9 +68,22 @@ class SpendTransactionsController < ApplicationController
 
   private
 
+  def valid_transaction?
+    spend_category_ids = params[:spend_transaction][:spend_category_ids]
+    spend_category_ids.is_a?(Array) && spend_category_ids.any?(&:present?) &&
+      spend_transaction_params[:name].present? && spend_transaction_params[:amount].present?
+  end
+
+  def create_category_transactions
+    spend_category_ids = params[:spend_transaction][:spend_category_ids]
+    spend_category_ids.each do |spend_category_id|
+      CategoryTransaction.create(spend_category_id:, spend_transaction_id: @spend_transaction.id)
+    end
+  end
+
   def reload_form
     @categories = current_user.spend_categories
-    flash.now[:alert] = 'No category selected'
+    flash.now[:alert] = 'Some fields are not set'
     render :new, status: :unprocessable_entity
   end
 
@@ -89,6 +94,6 @@ class SpendTransactionsController < ApplicationController
   end
 
   def spend_transaction_params
-    params.require(:spend_transaction).permit(:name, :amount, :icon, :author_id, :spend_category_ids)
+    params.require(:spend_transaction).permit(:name, :amount, :icon)
   end
 end

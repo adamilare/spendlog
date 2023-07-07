@@ -19,17 +19,7 @@ class SpendCategoriesController < ApplicationController
 
   def create
     current_user
-    @spend_category = current_user.spend_categories.build(spend_category_params.except(:icon))
-
-    uploaded_icon = params[:spend_category][:icon]
-
-    # @spend_category.icon = process_icon_upload(params[:spend_category][:icon])
-
-    if uploaded_icon.present?
-      file_path = Rails.root.join('app', 'assets', 'images', uploaded_icon.original_filename)
-      File.binwrite(file_path, uploaded_icon.read)
-      @spend_category.icon = uploaded_icon.original_filename
-    end
+    @spend_category = current_user.spend_categories.build(spend_category_params)
 
     respond_to do |format|
       if @spend_category.save

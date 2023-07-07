@@ -2,6 +2,7 @@ class SpendCategory < ApplicationRecord
   belongs_to :user
   has_many :category_transactions
   has_many :spend_transactions, through: :category_transactions
+  has_one_attached :icon
 
   validates :name, :icon, presence: true
 
